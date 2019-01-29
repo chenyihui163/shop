@@ -1,0 +1,37 @@
+package com.xysoft.dao.impl;
+
+import java.util.List;
+import java.util.Map;
+
+import com.xysoft.dao.TFitDsxxDao;
+import com.xysoft.entity.TFitDsxx;
+import com.xysoft.support.BaseDaoImpl;
+import com.xysoft.support.PageParam;
+import com.xysoft.support.Pager;
+
+public class TFitDsxxDaoImpl extends BaseDaoImpl<TFitDsxx> implements TFitDsxxDao{
+	
+	public Pager<List<Map<String,Object>>> getTFitDsxxs(PageParam page, String name) {
+		
+		  String sql = "select dsxx.*,dspp.dsppmc as dsppmc,dsfg.dsfgmc as dsfgmc,dszl.dszlmc as dszlmc "
+		        +"from t_fit_dsxx dsxx "
+				+ "join t_fit_dspp dspp on dsxx.dsppid = dspp.dsppid "
+				+ "join t_fit_dsfg dsfg on dsxx.dsfgid = dsfg.dsfgid "
+				+ "join t_fit_dszl dszl on dsxx.dszlid = dszl.dszlid "
+				+ "where dsxx.xq like ? order by dxss.cjsj desc";
+		   return this.getForPagerBySql(sql, page, "%" + name + "%");	
+	}
+	
+	public void saveTFitDsxx(TFitDsxx TFitDsxx) {
+		this.saveOrUpdate(TFitDsxx);
+	}
+
+	public TFitDsxx getTFitDsxx(String Dsxxid) {
+		return this.get(TFitDsxx.class, Dsxxid);
+	}
+
+	public void deleteTFitDsxx(TFitDsxx tFitDsxx) {
+		this.delete(tFitDsxx);
+	}
+
+}

@@ -1,0 +1,30 @@
+package com.xysoft.http.service.impl;
+
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.xysoft.dao.TFitDsxxDao;
+import com.xysoft.http.service.AppLightingService;
+import com.xysoft.support.LightingSearchParam;
+import com.xysoft.support.PageParam;
+import com.xysoft.support.Pager;
+import com.xysoft.util.JsonUtil;
+
+@Component
+public class AppLightingServiceImpl implements AppLightingService {
+
+	@Resource
+	private TFitDsxxDao tFitDsxxDao;
+	
+	@Transactional(readOnly = true)
+	public String datas(PageParam page, LightingSearchParam param) {
+		Pager<List<Map<String,Object>>> pager = this.tFitDsxxDao.getTFitDsxxs(page, param);
+		return JsonUtil.toStringFromObject(pager);
+	}
+
+}

@@ -1,0 +1,43 @@
+package com.xysoft.dao.impl;
+
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.stereotype.Component;
+
+import com.xysoft.dao.TFitDdxxDao;
+import com.xysoft.entity.TFitDdxx;
+import com.xysoft.support.BaseDaoImpl;
+import com.xysoft.support.PageParam;
+import com.xysoft.support.Pager;
+
+@Component
+public class TFitDdxxDaoImpl extends BaseDaoImpl<TFitDdxx> implements TFitDdxxDao{
+	
+	public Pager<List<Map<String,Object>>> getTFitDdxxs(PageParam page, String name) {
+		  String sql = "select ddxx.*, dsxx.dsxxmc as dsxxmc, yhxx.yhm as yhm "
+		        +"from t_fit_ddxx ddxx "
+				+"join t_fit_dsxx dsxx on ddxx.dsxxid = dsxx.dsxxid "
+				+"join t_fit_yhxx yhxx on ddxx.yhxxid = yhxx.yhxxid "
+				+"where ddxx.sjrxm like ? order by ddxx.xdsj desc";
+		   return this.getForPagerBySql(sql, page, "%" + name + "%");	
+	}
+	
+	public List<Map<String,Object>> getTFitDdxxByYhid(String yhxxid,String ddzt){
+		  String sql = "select ddxx.*, dsxx.dsxxmc from t_fit_ddxx ddxx"
+					+" left join t_fit_dsxx dsxx on ddxx.dsxxid = dsxx.dsxxid"
+					+" left join t_fit_pjxx pjxx on ddxx.ddxxid = pjxx.ddxxid"
+					+" where ddxx.yhxxid = ? and ddxx.ddzt = ? and ddxx.sfxs = 1 order by ddxx.xdsj desc";
+			   return this.getForMapBySql(sql, yhxxid,ddzt);
+	}
+	
+	public TFitDdxx getTFitDdxx(String ddxxid){
+		return this.get(TFitDdxx.class, ddxxid);
+	}
+	
+	public void saveOrUpdateTFitDdxx(TFitDdxx TFitddxx) {
+		this.saveOrUpdate(TFitddxx);
+		
+	}
+	
+}

@@ -1,0 +1,123 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/common/hplus/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="/common/hplus/css/style.css?v=4.1.0" rel="stylesheet">
+        <link href="/common/hplus/css/plugins/summernote/summernote.css" rel="stylesheet">
+    <link href="/common/hplus/css/plugins/summernote/summernote-bs3.css" rel="stylesheet">
+    
+    <script charset="utf-8" src="/common/hplus/js/jquery.min.js"></script>
+    <script src="/common/hplus/js/bootstrap.min.js?v=3.3.6"></script>
+    <script src="/common/hplus/js/plugins/validate/jquery.validate.min.js"></script>
+    <script src="/common/hplus/js/plugins/validate/messages_zh.min.js"></script>
+    
+    <script src="/common/hplus/js/plugins/summernote/summernote.min.js"></script>
+	<script src="/common/hplus/js/plugins/summernote/summernote-zh-CN.js"></script>
+    
+    <script charset="utf-8" src="/template/admin/js/sysUtils.js"></script>
+</head>
+<body class="gray-bg">
+	<div class="wrapper wrapper-content">
+		<div class="ibox float-e-margins">
+	        <div class="ibox-title">
+	            <h5>编辑地方类型 <small>此功能添加或编辑地方类型</small></h5>
+	        </div>
+	        <div class="ibox-content">
+	            <form action="" method="post" class="form-horizontal">
+	            	<input type="hidden" name="yhxxid" value="<#if data??>${data.yhxxid}</#if>">
+	                <div class="form-group">
+	                    <label class="col-sm-1 control-label">用户姓名</label>
+	                    <div class="col-sm-11">
+	                        <input type="text" class="form-control" name="yhxm" value="<#if data??>${data.yhxm}</#if>" placeholder="输入用户姓名" required>
+	                    </div>
+	                </div>
+	                <div class="hr-line-dashed"></div>
+	                <div class="form-group">
+	                    <label class="col-sm-1 control-label">性别</label>
+	                    <div class="col-sm-11">
+	                        <div class="radio i-checks">
+	                            <label><input type="radio" value="1" name="xb" <#if data??><#if data.xb>checked</#if><#else>checked</#if>><i></i>男</label>
+	                        </div>
+	                        <div class="radio i-checks">
+	                            <label><input type="radio" value="0" name="xb" <#if data??><#if !data.xb>checked</#if></#if>> <i></i>女</label>
+	                        </div>
+	                    </div>
+	                </div>
+	                <div class="hr-line-dashed"></div>
+	                <div class="form-group">
+	                    <label class="col-sm-1 control-label">用户名</label>
+	                    <div class="col-sm-11">
+	                        <input type="text" class="form-control" name="yhm" value="<#if data??>${data.yhm}</#if>" placeholder="输入用户名" required>
+	                    </div>
+	                </div>
+	                <div class="hr-line-dashed"></div>
+	                <div class="form-group">
+	                    <label class="col-sm-1 control-label">邮箱</label>
+	                    <div class="col-sm-11">
+	                        <input type="text" class="form-control" name="yx" value="<#if data??>${data.yx}</#if>" placeholder="输入用户邮箱" required>
+	                    </div>
+	                </div>
+	                <div class="hr-line-dashed"></div>
+	                <div class="form-group">
+	                    <label class="col-sm-1 control-label">邮编</label>
+	                    <div class="col-sm-11">
+	                        <input type="text" class="form-control" name="yb" value="<#if data??>${data.yb}</#if>" placeholder="输入用户邮编" required>
+	                    </div>
+	                </div>
+        	        <div class="hr-line-dashed"></div>
+	                <div class="form-group">
+	                    <label class="col-sm-1 control-label">地址</label>
+	                    <div class="col-sm-11">
+	                        <input type="text" class="form-control" name="dz" value="<#if data??>${data.dz}</#if>" placeholder="输入用户地址" required>
+	                    </div>
+	                </div>	        
+	                <div class="hr-line-dashed"></div>
+	                <div class="form-group">
+	                    <label class="col-sm-1 control-label">电话号码</label>
+	                    <div class="col-sm-11">
+	                        <input type="text" class="form-control" name="dhhm" value="<#if data??>${data.dhhm}</#if>" placeholder="输入用户电话号码" required>
+	                    </div>
+	                </div>
+	                <div class="hr-line-dashed"></div>
+	                <div class="form-group">
+	                    <div class="col-sm-4 col-sm-offset-2">
+	                        <button class="btn btn-primary" type="submit">保存内容</button>
+	                        <button class="btn btn-white" type="button" onclick="userinput_back()">返回</button>
+	                    </div>
+	                </div>
+	            </form>
+	        </div>
+	    </div>
+    </div>
+</body>
+<script type="text/javascript">
+	var form = $('body').find('form');
+	form.validate({
+		submitHandler: function(f) {
+  			$.ajax({
+				url : '/admin/user.do?save',
+				type: 'post',
+				data : $(f).serialize(),
+				dataType : 'json',
+				success: function(res) {
+					if(res.success) {
+						userinput_back();
+						parent.layer.msg(res.title);
+					}
+				},
+				error: function(data) {
+					parent.layer.msg(data);
+				}
+			});
+		}
+	});
+	
+	var userinput_back = function() {
+		$(this)[0].location.href = 'user.do?list';
+	};
+</script>
+</html>

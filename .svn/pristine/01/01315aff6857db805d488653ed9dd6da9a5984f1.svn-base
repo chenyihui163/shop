@@ -1,0 +1,184 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/common/hplus/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="/common/hplus/css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+    <link href="/common/hplus/css/animate.css" rel="stylesheet">
+    <link href="/common/hplus/css/style.css?v=4.1.0" rel="stylesheet">
+    
+    <script charset="utf-8" src="/common/hplus/js/jquery.min.js"></script>
+    <script src="/common/hplus/js/bootstrap.min.js?v=3.3.6"></script>
+    <script src="/common/hplus/js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+    <script src="/common/hplus/js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
+    <script src="/common/hplus/js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+    
+    <script charset="utf-8" src="/template/admin/js/sysUtils.js"></script>
+    <style>
+		.show-kczynr-box{
+			position: absolute; 
+			max-width: 300px; 
+			padding: 15px; 
+			background-color: #18a689; 
+			color: #FFF;
+			display: none;
+			-webkit-border-radius: 5px;
+			-moz-border-radius: 5px;
+			-ms-border-radius: 5px;
+			-o-border-radius: 5px;
+		}
+	</style>
+</head>
+<body>
+	<div class="ibox">
+        <div class="ibox-content animated fadeInRight">
+             <div id="lightinginfolist-gridtoolbar" class="btn-group">
+				<button onclick="lightinginfolist_add()" class="btn btn-primary " type="button"><i class="fa fa-plus"></i>&nbsp;添加</button>
+            </div>
+			<table id="lightinginfolist-grid" style="table-layout: fixed;"></table>
+		</div>
+	</div>
+	<div id="showbox" class="show-kczynr-box"></div>
+	
+</body>
+<script type="text/javascript">
+      var timer = null;
+      
+      actionEvents = {
+        'mouseover .xq' : function (e, value, row, index) {
+    		var box = $('#showbox');
+			clearTimeout(timer);
+            var pageX = e.pageX;
+            var pageY = e.pageY;
+            var txt = $(this).text();
+            timer = setTimeout(function () {
+                if (txt == "") {
+                    $(box).hide();
+                } else {
+                    $(box).show();
+                    $(box).html(txt);
+                }
+                if($(window.parent.document).height() < pageY + $(box).outerHeight(true)){
+            		pageY = pageY - $(box).outerHeight(true);
+            	}
+                $(box).css("left", pageX).css("top", pageY);
+            }, 500);
+         },
+         'mouseout .xq' : function (e, value, row, index) {
+         	var box = $('#showbox');
+            clearTimeout(timer);
+            $(box).hide();
+            $(box).empty();
+         }
+	};
+	
+	
+	$('#lightinginfolist-grid').bootstrapTable({
+		toolbar: '#lightinginfolist-gridtoolbar',
+		url: '/admin/lightinginfo.do?data',
+		search: true,
+      	showRefresh: true,
+      	showToggle: true,
+      	showColumns: true,
+		striped: true,
+		cache: false,  
+		pagination: true,
+		queryParamsType: '',
+		queryParams: function(params) {
+			params['page'] = params.pageNumber;
+			params['rows'] = params.pageSize;
+			params['keyword'] = params.searchText;
+			return params;
+		},
+		sidePagination: 'server',
+		pageNumber: 1,
+		pageSize: 25,
+		pageList: [10, 25, 50, 100],
+		idField: 'dsxxid',
+		iconSize: 'outline',
+	    columns: [
+	   		{field: 'dszlmc',title: '灯饰种类', width: 60},
+	   		{field: 'dsppmc',title: '灯饰品牌', width: 60},
+	   		{field: 'dsfgmc',title: '灯饰风格', width: 60},
+	        {field: 'tpdz',title: '封面图', align: 'center', width: 110, formatter: function(value, row, index) {
+	   			if(value === '' || value === null || value === undefined){value = '../template/admin/images/noimg.jpg';}
+	        	return '<img alt="封面图" src="'+value+'" onclick="LightingLookImg(\''+ value +'\')" onerror="sysUtils.imgSrcError(\'../template/admin/images/notfindimg.jpg\');" style="max-width:100px;max-height:100px;cursor: pointer;">';
+	        }},
+	        {field: 'dj',title: '单价', width: 60},
+	   		{field: 'xq',title: '详情', width: 140,
+	   		cellStyle: {css: {'white-space': 'nowrap','overflow': 'hidden','text-overflow': 'ellipsis'}}, 
+	        formatter: function(value, row, index) {return  '<span class="xq">' + value + '</span>';}, 
+	        events: actionEvents
+	   		},
+	   		{field: 'kc',title: '库存', width: 60},
+	        {field: 'xgsj', title: '最后修改时间', width: 60, formatter: function(value, row, index) {
+	        	return new Date(value.time).Format('yyyy-MM-dd hh:mm:ss');
+	        }},
+	        {field: 'dsxxid', title: '主要操作', width: 80, formatter: function(value, row, index) {
+	        	var btnhtml = '<div class="float-e-margins">' +
+					'<button onclick="lightinginfolist_edit(\'' +value + '\')" class="btn btn-xs btn-info " type="button"><i class="fa fa-paste"></i> 编辑</button> ' +
+					'<button onclick="lightinginfolist_delete(\'' +value + '\')" class="btn btn-xs btn-danger " type="button"><i class="fa fa-close"></i> 删除</button>' +
+				'</div>';
+	        	return btnhtml;
+	        }}
+	    ]
+	});
+	
+	var lightinginfolist_add = function() {
+		$(this)[0].location.href = 'lightinginfo.do?add';
+	};
+	
+	var lightinginfolist_edit = function(value) {
+			$(this)[0].location.href = 'lightinginfo.do?edit&dsxxid=' + value;
+	};
+	
+	var lightinginfolist_delete = function(value) {
+	    var content = '您确定要删除该灯饰信息数据吗？';
+	 /*    $.ajax({
+				url : '/admin/lightinginfo.do?checkkcxxfjused',
+				type: 'post',
+				data : {id: value},
+				dataType : 'json',
+				success : function(res) {
+					if(res.title == "false") {
+						content = '有该课程信息的附件，您确定要删除该课程信息数据吗？';
+					} */
+		 var index = parent.layer.open({
+				title: '提示',
+				icon: 0,
+				btn: ['确定', '取消'],
+				content: content,
+				cancel: function() {},
+				yes: function() {
+					$.ajax({
+						url : '/admin/lightinginfo.do?delete',
+						type: 'post',
+						data : {id: value},
+						dataType : 'json',
+						success : function(res) {
+							if(res.success) {
+								$('#lightinginfolist-grid').bootstrapTable('refresh');
+								parent.layer.close(index);
+								parent.layer.msg(res.title);
+							}
+						}
+					});				
+				}
+			});
+      }
+	
+	var LightingLookImg = function(value) {
+		parent.layer.open({
+			title:false,
+		    type: 1,
+		    skin: 'layui-layer-demo',
+			shadeClose: true, 
+			maxWidth: window.screen.availWidth,
+		    content:  '<img src="'+value+'" style="max-width:400px;" />'
+		});
+	};
+</script>
+</html>

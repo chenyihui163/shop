@@ -1,0 +1,123 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/common/hplus/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="/common/hplus/css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+    <link href="/common/hplus/css/animate.css" rel="stylesheet">
+    <link href="/common/hplus/css/style.css?v=4.1.0" rel="stylesheet">
+    
+    <script charset="utf-8" src="/common/hplus/js/jquery.min.js"></script>
+    <script src="/common/hplus/js/bootstrap.min.js?v=3.3.6"></script>
+    <script src="/common/hplus/js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+    <script src="/common/hplus/js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
+    <script src="/common/hplus/js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+    
+    <script charset="utf-8" src="/template/admin/js/sysUtils.js"></script>
+    <style>
+		.show-kczynr-box{
+			position: absolute; 
+			max-width: 300px; 
+			padding: 15px; 
+			background-color: #18a689; 
+			color: #FFF;
+			display: none;
+			-webkit-border-radius: 5px;
+			-moz-border-radius: 5px;
+			-ms-border-radius: 5px;
+			-o-border-radius: 5px;
+		}
+		
+		body{
+		    background-image: url(/template/admin/images/lights.jpg); background-position:100%,100%; 
+            background-size :cover;background-repeat:no-repeat;
+		}
+		.ibox{
+		opacity: 0.8;
+		}
+	</style>
+</head>
+<body>
+	<div class="ibox">
+        <div class="ibox-content animated fadeInRight">
+             <div id="evaluatelist-gridtoolbar" class="btn-group">
+            </div>
+			<table id="evaluatelist-grid" style="table-layout: fixed;"></table>
+		</div>
+	</div>
+	<div id="showbox" class="show-kczynr-box"></div>
+</body>
+<script type="text/javascript">
+      var timer = null;
+      
+      actionEvents = {
+        'mouseover .pjnr' : function (e, value, row, index) {
+    		var box = $('#showbox');
+			clearTimeout(timer);
+            var pageX = e.pageX;
+            var pageY = e.pageY;
+            var txt = $(this).text();
+            timer = setTimeout(function () {
+                if (txt == "") {
+                    $(box).hide();
+                } else {
+                    $(box).show();
+                    $(box).html(txt);
+                }
+                if($(window.parent.document).height() < pageY + $(box).outerHeight(true)){
+            		pageY = pageY - $(box).outerHeight(true);
+            	}
+                $(box).css("left", pageX).css("top", pageY);
+            }, 500);
+         },
+         'mouseout .pjnr' : function (e, value, row, index) {
+         	var box = $('#showbox');
+            clearTimeout(timer);
+            $(box).hide();
+            $(box).empty();
+         }
+	};
+	
+	
+	$('#evaluatelist-grid').bootstrapTable({
+		toolbar: '#evaluatelist-gridtoolbar',
+		url: '/admin/evaluate.do?data',
+		search: true,
+      	showRefresh: true,
+      	showToggle: true,
+      	showColumns: true,
+		striped: true,
+		cache: false,  
+		pagination: true,
+		queryParamsType: '',
+		queryParams: function(params) {
+			params['page'] = params.pageNumber;
+			params['rows'] = params.pageSize;
+			params['keyword'] = params.searchText;
+			return params;
+		},
+		sidePagination: 'server',
+		pageNumber: 1,
+		pageSize: 25,
+		pageList: [10, 25, 50, 100],
+		idField: 'pjxxid',
+		iconSize: 'outline',
+	    columns: [
+	        {field: 'yhm',title: '用户名', width: 60},
+	   		{field: 'dsxxmc',title: '灯饰名称', width: 60},
+	   		{field: 'pjnr',title: '评价内容', width: 140,
+	   		cellStyle: {css: {'white-space': 'nowrap','overflow': 'hidden','text-overflow': 'ellipsis'}}, 
+	        formatter: function(value, row, index) {return  '<span class="pjnr">' + value + '</span>';}, 
+	        events: actionEvents
+	   		},
+	   		{field: 'pjsj', title: '评价时间', width: 60, formatter: function(value, row, index) {
+	        	return new Date(value.time).Format('yyyy-MM-dd hh:mm:ss');
+	        }},
+	    ]
+	});
+	
+</script>
+</html>

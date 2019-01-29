@@ -1,0 +1,17 @@
+package com.xysoft.dao;
+
+import com.xysoft.entity.TFitDsxxtj;
+import com.xysoft.support.BaseDao;
+
+public interface TFitDsxxtjDao extends BaseDao<TFitDsxxtj>{
+
+	/**
+	 * 获取灯饰统计信息
+	 */
+	public TFitDsxxtj getTFitDsxxtj(String dsxxid);
+	
+	/**
+	 * 保存或更新统计信息
+	 */
+	public void saveOrUpdateTFitDsxxtj(TFitDsxxtj dsxxtj);
+}

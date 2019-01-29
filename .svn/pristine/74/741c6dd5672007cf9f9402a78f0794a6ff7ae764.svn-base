@@ -1,0 +1,12 @@
+package com.xysoft.http.service;
+
+import com.xysoft.support.LightingSearchParam;
+import com.xysoft.support.PageParam;
+
+public interface AppLightingService {
+
+	/**
+	 * 获取灯饰信息
+	 */
+	public String datas(PageParam page,LightingSearchParam param);
+}

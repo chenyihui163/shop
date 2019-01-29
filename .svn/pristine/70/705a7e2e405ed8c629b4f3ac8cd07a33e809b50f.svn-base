@@ -1,0 +1,218 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/common/hplus/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="/common/hplus/css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+    <link href="/common/hplus/css/animate.css" rel="stylesheet">
+    <link href="/common/hplus/css/style.css?v=4.1.0" rel="stylesheet">
+    
+    <script charset="utf-8" src="/common/hplus/js/jquery.min.js"></script>
+    <script src="/common/hplus/js/bootstrap.min.js?v=3.3.6"></script>
+    <script src="/common/hplus/js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+    <script src="/common/hplus/js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
+    <script src="/common/hplus/js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+    
+    <script charset="utf-8" src="/template/admin/js/sysUtils.js"></script>
+    <style>
+		.show-kczynr-box{
+			position: absolute; 
+			max-width: 300px; 
+			padding: 15px; 
+			background-color: #18a689; 
+			color: #FFF;
+			display: none;
+			-webkit-border-radius: 5px;
+			-moz-border-radius: 5px;
+			-ms-border-radius: 5px;
+			-o-border-radius: 5px;
+		}
+	</style>
+</head>
+<body>
+	<div class="ibox">
+        <div class="ibox-content animated fadeInRight">
+             <div id="orderinfolist-gridtoolbar" class="btn-group">
+            </div>
+			<table id="orderinfolist-grid" style="table-layout: fixed;"></table>
+		</div>
+	</div>
+	<div id="showbox" class="show-kczynr-box"></div>
+</body>
+<script type="text/javascript">
+      var timer = null;
+      
+      actionEvents = {
+        'mouseover .dz' : function (e, value, row, index) {
+    		var box = $('#showbox');
+			clearTimeout(timer);
+            var pageX = e.pageX;
+            var pageY = e.pageY;
+            var txt = $(this).text();
+            timer = setTimeout(function () {
+                if (txt == "") {
+                    $(box).hide();
+                } else {
+                    $(box).show();
+                    $(box).html(txt);
+                }
+                if($(window.parent.document).height() < pageY + $(box).outerHeight(true)){
+            		pageY = pageY - $(box).outerHeight(true);
+            	}
+                $(box).css("left", pageX).css("top", pageY);
+            }, 500);
+         },
+         'mouseout .dz' : function (e, value, row, index) {
+         	var box = $('#showbox');
+            clearTimeout(timer);
+            $(box).hide();
+            $(box).empty();
+         }
+	};
+	
+	
+	$('#orderinfolist-grid').bootstrapTable({
+		toolbar: '#orderinfolist-gridtoolbar',
+		url: '/admin/orderinfo.do?data',
+		search: true,
+      	showRefresh: true,
+      	showToggle: true,
+      	showColumns: true,
+		striped: true,
+		cache: false,  
+		pagination: true,
+		queryParamsType: '',
+		queryParams: function(params) {
+			params['page'] = params.pageNumber;
+			params['rows'] = params.pageSize;
+			params['keyword'] = params.searchText;
+			return params;
+		},
+		sidePagination: 'server',
+		pageNumber: 1,
+		pageSize: 25,
+		pageList: [10, 25, 50, 100],
+		idField: 'ddxxid',
+		iconSize: 'outline',
+	    columns: [
+	        {field: 'yhm',title: '用户名', width: 60},
+	   		{field: 'dsxxmc',title: '灯饰名称', width: 60},
+	   		{field: 'sl',title: '购买数量', width: 60},
+	        {field: 'zjg',title: '总价格(元)', width: 60},
+	   		{field: 'ddzt',title: '订单状态', width: 60, formatter: function(value, row, index){
+	   		        if(value == 1) return '<span>未发货</span>'
+	   		        else if(value == 2) return '<span>已发货</span>'
+	   		        else return '<span>已收件</span>'
+	   		}},
+	   		{field: 'sjrxm',title: '收件人姓名', width: 60},
+	   		{field: 'sjrdh',title: '收件人电话', width: 80},
+	   		{field: 'dz',title: '地址', width: 50,
+	   		cellStyle: {css: {'white-space': 'nowrap','overflow': 'hidden','text-overflow': 'ellipsis'}}, 
+	        formatter: function(value, row, iyoubianndex) {return  '<span class="dz">' + value + '</span>';}, 
+	        events: actionEvents
+	   		},
+	   		{field: 'zflx',title: '支付类型', width: 60, formatter: function(value, row, index){
+	   		        if(value == 1) return '<span>银联</span>'
+	   		        else if(value == 2) return '<span>支付宝</span>'
+	   		        else return '<span>微信</span>'
+	   		}},
+	   		{field: 'kdlx',title: '快递类型', width: 60, formatter: function(value, row, index){
+	   		        if(value == 1) return '<span>中通</span>'
+	   		        else if(value == 2) return '<span>申通</span>'
+	   		        else return '<span>顺丰</span>'
+	   		}},
+	   		{field: 'kdfy',title: '快递费用', width: 60},
+	   		{field: 'xdsj', title: '下单时间', width: 60, formatter: function(value, row, index) {
+	        	return new Date(value.time).Format('yyyy-MM-dd hh:mm:ss');
+	        }},
+	        {field: 'xgsj', title: '最后修改时间', width: 60, formatter: function(value, row, index) {
+	        	return new Date(value.time).Format('yyyy-MM-dd hh:mm:ss');
+	        }},
+	        {field: 'sfxs',title: '是否显示', width: 50, formatter: function(value, row, index){
+	   		        if(value == 0) return '<span>否</span>'
+	   		        else return '<span>显示</span>'
+	   		}},
+	        {field: 'ddxxid', title: '主要操作', width: 100, formatter: function(value, row, index) {
+	           if(row.ddzt == 1){
+	              var btnhtml = '<div class="float-e-margins">' +
+					'<button onclick="orderinfolist_send(\'' +value + '\')" class="btn btn-xs btn-info " type="button"><i class="fa fa-paste"></i>发货</button> ' +
+					'<button onclick="orderinfolist_delete(\'' +value + '\')" class="btn btn-xs btn-danger " type="button"><i class="fa fa-close"></i>删除</button>' +
+				'</div>';
+				}
+	        	else if(row.ddzt == 2){
+	        	   var btnhtml = '<div class="float-e-margins">' +
+					'<button  class="btn btn-xs btn-default " type="button"><i class="fa fa-paste" disabled="disabled"></i>已发货</button> ' +
+					'<button onclick="orderinfolist_delete(\'' +value + '\')" class="btn btn-xs btn-danger " type="button"><i class="fa fa-close"></i>删除</button>' +
+				'</div>';
+				}
+				else{
+				   var btnhtml = '<div class="float-e-margins">' +
+					'<button  class="btn btn-xs btn-default " type="button"><i class="fa fa-paste" disabled="disabled"></i>已发货</button> ' +
+					'<button onclick="orderinfolist_delete(\'' +value + '\')" class="btn btn-xs btn-danger " type="button"><i class="fa fa-close"></i>删除</button>' +
+				'</div>';
+				}
+	        	return btnhtml;
+	        }}
+	    ]
+	});
+	
+	var orderinfolist_delete = function(value) {
+	    var content = '您确定要删除该灯饰信息数据吗？';
+		var index = parent.layer.open({
+				title: '提示',
+				icon: 0,
+				btn: ['确定', '取消'],
+				content: content,
+				cancel: function() {},
+				yes: function() {
+					$.ajax({
+						url : '/admin/orderinfo.do?delete',
+						type: 'post',
+						data : {ddxxid: value},
+						dataType : 'json',
+						success : function(res) {
+							if(res.success) {
+								$('#orderinfolist-grid').bootstrapTable('refresh');
+								parent.layer.close(index);
+								parent.layer.msg(res.title);
+							}
+						}
+					});				
+				}
+			});
+      }
+	  
+	  var orderinfolist_send = function(value) {
+	    var content = '您确定要发货吗？';
+		var index = parent.layer.open({
+				title: '提示',
+				icon: 0,
+				btn: ['确定', '取消'],
+				content: content,
+				cancel: function() {},
+				yes: function() {
+					$.ajax({
+						url : '/admin/orderinfo.do?send',
+						type: 'post',
+						data : {ddxxid: value},
+						dataType : 'json',
+						success : function(res) {
+							if(res.success) {
+								$('#orderinfolist-grid').bootstrapTable('refresh');
+								parent.layer.close(index);
+								parent.layer.msg(res.title);
+							}
+						}
+					});				
+				}
+			});
+      }
+	  
+	  
+	  
+	  
+</script>
+</html>

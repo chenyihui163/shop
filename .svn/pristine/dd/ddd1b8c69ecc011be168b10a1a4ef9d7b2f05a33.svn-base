@@ -1,0 +1,20 @@
+package com.xysoft.dao.impl;
+
+import org.springframework.stereotype.Component;
+
+import com.xysoft.dao.TFitPjxxDao;
+import com.xysoft.entity.TFitPjxx;
+import com.xysoft.support.BaseDaoImpl;
+
+@Component
+public class TFitPjxxDaoImpl extends BaseDaoImpl<TFitPjxx> implements TFitPjxxDao{
+
+	public TFitPjxx getTFitPjxx(String ddxxid) {
+		return this.get("from TFitPjxx t where t.ddxxid = ?",ddxxid);
+	}
+
+	public void saveOrUpdateTFitPjxx(TFitPjxx pjxx) {
+		this.saveOrUpdate(pjxx);
+	}
+
+}

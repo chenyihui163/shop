@@ -1,0 +1,127 @@
+package com.xysoft.entity;
+
+import java.sql.Timestamp;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.GenericGenerator;
+
+@Entity
+@Table(name = "t_fit_ddxx")
+public class TFitDdxx extends BaseEntity{
+	
+	
+	private static final long serialVersionUID = -7431436295834075181L;
+	private String ddxxid;//订单信息id
+	private String dsxxid;//灯饰信息id
+	private String yhxxid;//用户信息id
+	private Integer sl;//购买数量
+	private Double zjg;//总价格
+	private Timestamp xdsj;//下单时间
+	private Integer ddzt;//订单状态(1：未发货，2：已发货，3：已收件)
+	private Integer sfxs;//是否显示
+	private String sjrxm;//收件人姓名
+	private String sjrdh;//收件人电话
+	private String dz;//地址
+	private Integer zflx;//支付类型(1:银联，2：支付宝，3：微信)
+	private Integer kdlx;//快递类型(1：中通，2，申通，3：顺丰)
+	private Double kdfy;//快递费用
+	
+	@Id
+	@Column(length = 32, nullable = true)
+	@GeneratedValue(generator = "uuid")
+	@GenericGenerator(name = "uuid", strategy = "uuid")
+	public String getDdxxid() {
+		return ddxxid;
+	}
+	public void setDdxxid(String ddxxid) {
+		this.ddxxid = ddxxid;
+	}
+	@Column(length = 32, nullable = false)
+	public String getDsxxid() {
+		return dsxxid;
+	}
+	public void setDsxxid(String dsxxid) {
+		this.dsxxid = dsxxid;
+	}
+	@Column(length = 32, nullable = false)
+	public String getYhxxid() {
+		return yhxxid;
+	}
+	public void setYhxxid(String yhxxid) {
+		this.yhxxid = yhxxid;
+	}
+	public Integer getSl() {
+		return sl;
+	}
+	public void setSl(Integer sl) {
+		this.sl = sl;
+	}
+	public Double getZjg() {
+		return zjg;
+	}
+	public void setZjg(Double zjg) {
+		this.zjg = zjg;
+	}
+	public Timestamp getXdsj() {
+		return xdsj;
+	}
+	public void setXdsj(Timestamp xdsj) {
+		this.xdsj = xdsj;
+	}
+	public Integer getDdzt() {
+		return ddzt;
+	}
+	public void setDdzt(Integer ddzt) {
+		this.ddzt = ddzt;
+	}
+	public Integer getSfxs() {
+		return sfxs;
+	}
+	public void setSfxs(Integer sfxs) {
+		this.sfxs = sfxs;
+	}
+	public String getSjrxm() {
+		return sjrxm;
+	}
+	public void setSjrxm(String sjrxm) {
+		this.sjrxm = sjrxm;
+	}
+	public String getSjrdh() {
+		return sjrdh;
+	}
+	public void setSjrdh(String sjrdh) {
+		this.sjrdh = sjrdh;
+	}
+	public String getDz() {
+		return dz;
+	}
+	public void setDz(String dz) {
+		this.dz = dz;
+	}
+	public Integer getZflx() {
+		return zflx;
+	}
+	public void setZflx(Integer zflx) {
+		this.zflx = zflx;
+	}
+	public Integer getKdlx() {
+		return kdlx;
+	}
+	public void setKdlx(Integer kdlx) {
+		this.kdlx = kdlx;
+	}
+	public Double getKdfy() {
+		return kdfy;
+	}
+	public void setKdfy(Double kdfy) {
+		this.kdfy = kdfy;
+	}
+	
+	
+
+}

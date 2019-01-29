@@ -1,0 +1,34 @@
+package com.xysoft.dao;
+
+import java.util.List;
+import java.util.Map;
+
+import com.xysoft.entity.TFitDdxx;
+import com.xysoft.support.BaseDao;
+import com.xysoft.support.PageParam;
+import com.xysoft.support.Pager;
+
+public interface TFitDdxxDao extends BaseDao<TFitDdxx>{
+	
+	/**
+	 * 获取所有订单信息
+	 * */
+	public Pager<List<Map<String,Object>>> getTFitDdxxs(PageParam page, String name);
+	
+	/**
+	 * 获取一个订单信息
+	 * */
+	public TFitDdxx getTFitDdxx(String ddxxid);
+	
+	/**
+	 * 保存及更新一个订单信息
+	 * */
+	public void saveOrUpdateTFitDdxx(TFitDdxx TFitddxx);
+	
+	/**
+	 * 查询对应用户订单信息
+	 * */
+	public List<Map<String,Object>> getTFitDdxxByYhid(String yhid);
+	
+
+}

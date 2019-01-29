@@ -1,0 +1,17 @@
+package com.xysoft.dao;
+
+import com.xysoft.entity.TFitPjxx;
+import com.xysoft.support.BaseDao;
+
+public interface TFitPjxxDao extends BaseDao<TFitPjxx>{
+
+	/**
+	 * 根据用户信息id获取评价记录
+	 */
+	public TFitPjxx getTFitPjxx(String ddxxid);
+	
+	/**
+	 * 保存评价记录
+	 */
+	public void saveOrUpdateTFitPjxx(TFitPjxx pjxx);
+}

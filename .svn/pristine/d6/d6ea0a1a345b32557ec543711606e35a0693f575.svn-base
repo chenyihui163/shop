@@ -1,0 +1,113 @@
+package com.xysoft.admin.service.impl;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
+import org.springframework.beans.BeanUtils;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.xysoft.admin.service.LightingInfoService;
+import com.xysoft.dao.TFitDsfgDao;
+import com.xysoft.dao.TFitDsppDao;
+import com.xysoft.dao.TFitDsxxDao;
+import com.xysoft.dao.TFitDszlDao;
+import com.xysoft.entity.TFitDsfg;
+import com.xysoft.entity.TFitDspp;
+import com.xysoft.entity.TFitDsxx;
+import com.xysoft.entity.TFitDszl;
+import com.xysoft.support.PageParam;
+import com.xysoft.support.Pager;
+import com.xysoft.util.JsonUtil;
+import com.xysoft.util.NullUtils;
+
+@Component
+public class LightingInfoServiceImpl implements LightingInfoService{
+	
+	@Resource
+	private TFitDsxxDao tFitDsxxDao;
+	@Resource
+	private TFitDsfgDao tFitDsfgDao;
+	@Resource
+	private TFitDsppDao tFitDsppDao;
+	@Resource
+	private TFitDszlDao tFitDszlDao;
+	
+	@Transactional(readOnly = true)
+	public Map<String, Object> toList() {
+		Map<String,Object> model =new HashMap<String,Object>();
+		model.put("model", "admin/lightinginfo/lightinginfo_list");
+		return model;		
+	}
+	
+	@Transactional(readOnly = true)
+	public String toData(PageParam page, String keyword) {
+		Pager<List<Map<String,Object>>> pager = this.tFitDsxxDao.getTFitDsxxs(page, keyword);
+		return JsonUtil.toStringFromObject(pager.putMapObject());
+	}
+	
+	@Transactional(readOnly = true)
+	public Map<String, Object> addLighting() {
+		Map<String,Object> model = new HashMap<String,Object>();
+		List<TFitDspp> tFitDspps = this.tFitDsppDao.getTFitDsppList();
+        List<TFitDsfg> tFitDsfgs = this.tFitDsfgDao.getTFitDsfgList();
+        List<TFitDszl> tFitDszls = this.tFitDszlDao.getTFitDszlList();
+	    model.put("dszl", tFitDszls);
+	    model.put("dspp", tFitDspps);
+	    model.put("dsfg", tFitDsfgs);
+		model.put("model", "admin/lightinginfo/lightinginfo_input");
+		return model;
+	}
+
+	@Transactional(readOnly = true)
+	public Map<String, Object> editLighting(String id) {
+		Map<String,Object> model = new HashMap<String,Object>();
+		if(NullUtils.isNotEmpty(id)){
+			TFitDsxx tFitDsxx = this.tFitDsxxDao.getTFitDsxx(id);
+            List<TFitDspp> tFitDspps = this.tFitDsppDao.getTFitDsppList();
+            List<TFitDsfg> tFitDsfgs = this.tFitDsfgDao.getTFitDsfgList();
+            List<TFitDszl> tFitDszls = this.tFitDszlDao.getTFitDszlList();
+			if(tFitDsxx != null){
+			   model.put("data", tFitDsxx);
+			   model.put("dszl", tFitDszls);
+			   model.put("dspp", tFitDspps);
+			   model.put("dsfg", tFitDsfgs);
+			}
+		}
+		model.put("model", "admin/lightinginfo/lightinginfo_input");
+		return model;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Transactional
+	public String saveLighting(TFitDsxx param) {
+		TFitDsxx tFitDsxx = null;
+		if(NullUtils.isEmpty(param.getDsxxid())){
+			tFitDsxx = new TFitDsxx();
+		}
+		else{
+			tFitDsxx = this.tFitDsxxDao.getTFitDsxx(param.getDsxxid());
+		}
+		BeanUtils.copyProperties(param, tFitDsxx, new String[] {"dsxxid", "cjsj"});
+		this.tFitDsxxDao.saveTFitDsxx(tFitDsxx);
+		return JsonUtil.toRes("保存成功");
+	}
+
+	@SuppressWarnings("unchecked")
+	@Transactional
+	public String deleteLighting(String id) {
+		TFitDsxx tFitDsxx = null;
+		if(NullUtils.isEmpty(id)){
+			return JsonUtil.toResOfFail("删除失败");
+		}
+		else{
+			tFitDsxx = this.tFitDsxxDao.getTFitDsxx(id);
+			this.tFitDsxxDao.deleteTFitDsxx(tFitDsxx);
+		}
+		return JsonUtil.toRes("删除成功");
+	}
+
+}

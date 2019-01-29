@@ -1,0 +1,37 @@
+package com.xysoft.entity;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.GenericGenerator;
+
+@Entity
+@Table(name = "t_fit_dszl")
+public class TFitDszl extends BaseEntity{
+
+	
+	private static final long serialVersionUID = 429388723716202504L;
+	private String dszlid;//灯饰种类id
+	private String dszlmc;//灯饰种类名称
+	
+	@Id
+	@Column(length = 32, nullable = false)
+	@GeneratedValue(generator = "uuid")
+	@GenericGenerator(name = "uuid", strategy = "uuid")
+	public String getDszlid() {
+		return dszlid;
+	}
+	public void setDszlid(String dszlid) {
+		this.dszlid = dszlid;
+	}
+	public String getDszlmc() {
+		return dszlmc;
+	}
+	public void setDszlmc(String dszlmc) {
+		this.dszlmc = dszlmc;
+	}
+	
+}

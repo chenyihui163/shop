@@ -1,0 +1,237 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/common/hplus/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="/common/hplus/css/font-awesome.min.css?v=4.4.0" rel="stylesheet">
+    <link href="/common/hplus/css/style.css?v=4.1.0" rel="stylesheet">
+    <link href="/common/hplus/css/plugins/summernote/summernote.css" rel="stylesheet">
+    <link href="/common/hplus/css/plugins/summernote/summernote-bs3.css" rel="stylesheet">
+    <link href="/common/hplus/css/animate.css" rel="stylesheet">
+    <script charset="utf-8" src="/common/hplus/js/jquery.min.js"></script>
+    <script src="/common/hplus/js/bootstrap.min.js?v=3.3.6"></script>
+    <script src="/common/hplus/js/plugins/validate/jquery.validate.min.js"></script>
+    <script src="/common/hplus/js/plugins/validate/messages_zh.min.js"></script>
+    <script src="/common/hplus/js/plugins/summernote/summernote.min.js"></script>
+	<script src="/common/hplus/js/plugins/summernote/summernote-zh-CN.js"></script>
+    <script charset="utf-8" src="/template/admin/js/sysUtils.js"></script>
+    
+    <style type="text/css">
+      span{
+          font-size: 17px;
+      }
+      body{
+		    background-image: url(/template/admin/images/lights.jpg);
+            background-repeat:no-repeat;
+		}
+	  .ibox-content{
+		opacity: 0.8;
+		}
+    </style>
+</head>
+<body class="gray-bg">
+    <div class="wrapper wrapper-content">
+        <div class="row">
+            <div class="col-sm-4">             
+                <div class="ibox float-e-margins animated fadeInRightBig">
+                    <div class="ibox-title">
+                        <h5>订单信息</h5>
+                    </div>
+                    <div class="ibox-content no-padding">
+                        <ul class="list-group">
+                           <li class="list-group-item">
+                              <label control-label">订单状态</label>
+                              <div class="text-center">
+                                  <span><#if ddxx?? && ddxx.ddzt == 0>退货</#if></span>
+                                  <span><#if ddxx?? && ddxx.ddzt == 1>未发货</#if></span>
+                                  <span><#if ddxx?? && ddxx.ddzt == 2>已发货</#if></span>
+                                  <span><#if ddxx?? && ddxx.ddzt == 3>已收件</#if></span>
+                              </div>
+                            </li>
+                           <li class="list-group-item">
+                              <label control-label">购买数量</label>
+                              <div class="text-center">
+                                  <span><#if ddxx??>${ddxx.sl}</#if></span>
+                              </div>
+                           </li>
+                           <li class="list-group-item">
+                              <label control-label">购买总价</label>
+                              <div class="text-center">
+                                  <span><#if ddxx??>${ddxx.zjg}</#if></span>
+                              </div>
+                           </li>
+                           <li class="list-group-item">
+                              <label control-label">下单时间</label>
+                              <div class="text-center">
+                                  <span><#if ddxx??>${ddxx.xdsj}</#if></span>
+                              </div>
+                           </li>
+                           <li class="list-group-item">
+                              <label control-label">收件人姓名</label>
+                              <div class="text-center">
+                                  <span><#if ddxx??>${ddxx.sjrxm}</#if></span>
+                              </div>
+                           </li>
+                           <li class="list-group-item">
+                              <label control-label">收件人电话</label>
+                              <div class="text-center">
+                                  <span><#if ddxx??>${ddxx.sjrdh}</#if></span>
+                              </div>
+                           </li>
+                           <li class="list-group-item">
+                              <label control-label">地址</label>
+                              <div class="text-center">
+                                  <span><#if ddxx??>${ddxx.dz}</#if></span>
+                              </div>
+                           </li>
+                           <li class="list-group-item">
+                              <label control-label">支付类型</label>
+                              <div class="text-center">
+                                  <span><#if ddxx?? && ddxx.zflx == 1>银联</#if></span>
+                                  <span><#if ddxx?? && ddxx.zflx == 2>支付宝</#if></span>
+                                  <span><#if ddxx?? && ddxx.zflx == 3>微信</#if></span>
+                              </div>
+                           </li>
+                           <li class="list-group-item">
+                              <label control-label">快递类型</label>
+                              <div class="text-center">
+                                  <span><#if ddxx?? && ddxx.kdlx == 1>中通</#if></span>
+                                  <span><#if ddxx?? && ddxx.kdlx == 2>申通</#if></span>
+                                  <span><#if ddxx?? && ddxx.kdlx == 3>顺丰</#if></span>
+                              </div>
+                           </li>
+                           <li class="list-group-item">
+                              <label control-label">快递费用</label>
+                              <div class="text-center">
+                                  <span><#if ddxx??>${ddxx.kdfy}</#if></span>
+                              </div>
+                           </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="ibox float-e-margins animated fadeInUpBig">
+                    <div class="ibox-title">
+                        <h5>用户信息</h5>
+                    </div>
+                    <div class="ibox-content no-padding">
+                        <ul class="list-group">
+                           <li class="list-group-item">
+                               <label control-label">用户姓名</label>
+	                           <div class="text-center">
+	                               <span><#if yhxx?? && yhxx.yhxm != ''>${yhxx.yhxm}<#else>无</#if></span>
+	                           </div>
+                           </li>
+                           <li class="list-group-item">
+                               <label control-label">姓别</label>
+	                           <div class="text-center">
+	                               <span><#if yhxx?? && yhxx.xb == 1>男</#if></span>
+                                   <span><#if yhxx?? && yhxx.xb == 0>女</#if></span>
+	                           </div>
+                           </li>
+                           <li class="list-group-item">
+                               <label control-label">用户名</label>
+	                           <div class="text-center">
+	                               <span><#if yhxx?? && yhxx.yhm != ''>${yhxx.yhm}<#else>无</#if></span>
+	                           </div>
+                           </li>
+                           <li class="list-group-item">
+                               <label control-label">电话号码</label>
+	                           <div class="text-center">
+	                               <span><#if yhxx?? && yhxx.dhhm != ''>${yhxx.dhhm}<#else>无</#if></span>
+	                           </div>
+                           </li>
+                           <li class="list-group-item">
+                               <label control-label">邮箱</label>
+	                           <div class="text-center">
+	                               <span><#if yhxx?? && yhxx.yx != ''>${yhxx.yx}<#else>无</#if></span>
+	                           </div>
+                           </li>
+                           <li class="list-group-item">
+                               <label control-label">用户地址</label>
+	                           <div class="text-center">
+	                               <span><#if yhxx?? && yhxx.dz != ''>${yhxx.dz}<#else>无</#if></span>
+	                           </div>
+                           </li>
+                           <li class="list-group-item">
+                               <label control-label">邮编</label>
+	                           <div class="text-center">
+	                               <span><#if yhxx?? && yhxx.yb != ''>${yhxx.yb}<#else>无</#if></span>
+	                           </div>
+                           </li>
+                           <li class="list-group-item">
+                               <label control-label">最后登录时间</label>
+	                           <div class="text-center">
+	                               <span><#if yhxx?? && yhxx.zhdlsj != ''>${yhxx.zhdlsj}<#else>无</#if></span>
+	                           </div>
+                           </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="ibox float-e-margins animated fadeInLeftBig">
+                    <div class="ibox-title">
+                        <h5>商品信息</h5>
+                    </div>
+                    <div class="ibox-content no-padding">
+                        <ul class="list-group">
+                           <li class="list-group-item">
+                               <label control-label">灯饰名称</label>
+	                           <div class="text-center">
+	                               <span><#if dsxx??>${dsxx.dsxxmc}</#if></span>
+	                           </div>
+                           </li>
+                           <li class="list-group-item">
+                               <label control-label">灯饰图</label>
+	                           <div class="text-center">
+	                               <img id="device_img" src="<#if dsxx??>${dsxx.tpdz}<#else>/template/admin/images/lights.jpg</#if>" style="width:100px;height:100px; vertical-align: baseline;background:#24c6c8">
+	                           </div>
+                           </li>
+                           <li class="list-group-item">
+                               <label control-label">灯饰材质</label>
+	                           <div class="text-center">
+	                               <span><#if dsxx??>${dsxx.cz}</#if></span>
+	                           </div>
+                           </li>
+                           <li class="list-group-item">
+                               <label control-label">灯饰颜色</label>
+	                           <div class="text-center">
+	                               <span><#if dsxx??>${dsxx.ys}</#if></span>
+	                           </div>
+                           </li>
+                           <li class="list-group-item">
+                               <label control-label">安放位置</label>
+	                           <div class="text-center">
+	                               <span><#if dsxx??>${dsxx.afwz}</#if></span>
+	                           </div>
+                           </li>
+                           <li class="list-group-item">
+                               <label control-label">单价</label>
+	                           <div class="text-center">
+	                               <span><#if dsxx??>${dsxx.dj}</#if></span>
+	                           </div>
+                           </li>
+                           <li class="list-group-item">
+                               <label control-label">库存</label>
+	                           <div class="text-center">
+	                               <span><#if dsxx??>${dsxx.kc}</#if></span>
+	                           </div>
+                           </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+<script type="text/javascript">
+
+    
+		
+</script>
+</html>

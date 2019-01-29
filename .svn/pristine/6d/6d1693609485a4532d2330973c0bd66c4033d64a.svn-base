@@ -1,0 +1,14 @@
+package com.xysoft.http.service;
+
+public interface AppOrderService {
+
+	/**
+	 * 获取购物车信息
+	 */
+	public String shoppingcartdatas(String yhm);
+	
+	/**
+	 * 移出购物车
+	 */
+	public String deleteshoppingcarts(String yhm,String[] gwcid);
+}

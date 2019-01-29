@@ -1,0 +1,61 @@
+package com.xysoft.admin.service.impl;
+
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.xysoft.admin.service.UserService;
+import com.xysoft.dao.TFitYhxxDao;
+import com.xysoft.entity.TFitYhxx;
+import com.xysoft.support.PageParam;
+import com.xysoft.support.Pager;
+import com.xysoft.util.JsonUtil;
+
+@Component
+public class UserServiceImpl implements UserService{
+	
+	@Resource
+	private TFitYhxxDao tFitYhxxDao;
+	
+	@Transactional(readOnly = true)
+	public Map<String, Object> toList() {
+		Map<String,Object> model =new HashMap<String,Object>();
+		model.put("model", "admin/user/user_list");
+		return model;		
+	}
+	
+	@Transactional(readOnly = true)
+	public String toData(PageParam page, String keyword) {
+		Pager<TFitYhxx> pager = this.tFitYhxxDao.getTFitYhxxs(page, keyword);
+		return JsonUtil.toStringFromObject(pager.putMapObject());
+	}
+	
+	@Transactional(readOnly = true)
+	public Map<String, Object> addUser() {
+		Map<String,Object> model = new HashMap<String,Object>();
+		return model;
+	}
+
+	@Transactional(readOnly = true)
+	public Map<String, Object> editUser(String id) {
+		Map<String,Object> model = new HashMap<String,Object>();
+		return model;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Transactional
+	public String saveUser(TFitYhxx param) {
+		return null;
+	}
+
+	@SuppressWarnings("unchecked")
+	@Transactional
+	public String deleteUser(String id) {
+		return null;
+	}
+
+}

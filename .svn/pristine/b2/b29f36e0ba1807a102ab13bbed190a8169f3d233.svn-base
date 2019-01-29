@@ -1,0 +1,18 @@
+package com.xysoft.dao;
+
+import java.util.List;
+import java.util.Map;
+
+import com.xysoft.entity.TFitDsxx;
+import com.xysoft.support.BaseDao;
+import com.xysoft.support.LightingSearchParam;
+import com.xysoft.support.PageParam;
+import com.xysoft.support.Pager;
+
+public interface TFitDsxxDao extends BaseDao<TFitDsxx>{
+
+	/**
+	 * 获取灯饰信息
+	 */
+	public Pager<List<Map<String,Object>>> getTFitDsxxs(PageParam page, LightingSearchParam param);
+}

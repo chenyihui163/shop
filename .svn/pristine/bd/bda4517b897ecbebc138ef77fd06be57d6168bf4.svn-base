@@ -1,0 +1,32 @@
+package com.xysoft.dao;
+
+import com.xysoft.entity.TFitYhxx;
+import com.xysoft.support.BaseDao;
+import com.xysoft.support.PageParam;
+import com.xysoft.support.Pager;
+
+public interface TFitYhxxDao extends BaseDao<TFitYhxx>{
+	
+	/**
+	 * 查询所有用户信息
+	 * */
+	public Pager<TFitYhxx> getTFitYhxxs(PageParam page, String name);
+	
+	/**
+	 * 保存一个用户信息
+	 * */
+	public void saveTFitYhxx(TFitYhxx TFitYhxx);
+	
+	/**
+	 * 获取一个用户信息实体
+	 * */
+	public TFitYhxx getTFitYhxx(String yhxxid);
+	
+	/**
+	 * 根据用户名获取用户信息实体
+	 */
+	public TFitYhxx getTFitYhxxByYhm(String yhm);
+	
+	
+
+}

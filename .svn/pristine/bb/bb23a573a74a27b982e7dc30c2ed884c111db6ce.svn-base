@@ -1,0 +1,55 @@
+package com.xysoft.dao.impl;
+
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.stereotype.Component;
+
+import com.xysoft.dao.TFitDsxxDao;
+import com.xysoft.entity.TFitDsxx;
+import com.xysoft.support.BaseDaoImpl;
+import com.xysoft.support.LightingSearchParam;
+import com.xysoft.support.PageParam;
+import com.xysoft.support.Pager;
+import com.xysoft.util.NullUtils;
+
+@Component
+public class TFitDsxxDaoImpl extends BaseDaoImpl<TFitDsxx> implements TFitDsxxDao{
+
+	public Pager<List<Map<String, Object>>> getTFitDsxxs(PageParam page,
+			LightingSearchParam param) {
+		String sql = "select * from t_fit_dsxx dsxx"
+				+" left join t_fit_dspp dspp on dsxx.dsppid = dspp.dsppid"
+				+" left join t_fit_dszl dszl on dsxx.dszlid = dszl.dszlid"
+				+" left join t_fit_dsfg dsfg on dsxx.dsfgid = dsfg.dsfgid";
+		if(param != null){
+			if(NullUtils.isNotEmpty(param.getDsfg()) 
+			|| NullUtils.isNotEmpty(param.getDspp())
+			|| NullUtils.isNotEmpty(param.getDszl())){
+				sql += " where";
+				if(NullUtils.isNotEmpty(param.getDsfg())){
+					sql += " dsxx.dsfgid = ?";
+					if(NullUtils.isNotEmpty(param.getDspp())){
+						sql += " and dsxx.dsppid = ?";
+						if(NullUtils.isNotEmpty(param.getDszl())){
+							sql += " and dsxx.dszl = ?";							
+						}
+					}else if(NullUtils.isNotEmpty(param.getDszl())){
+						sql += " and dsxx.dszl = ?";
+					}
+				}else{
+					if(NullUtils.isNotEmpty(param.getDspp())){
+						sql += " dsxx.dsppid = ?";
+						if(NullUtils.isNotEmpty(param.getDszl())){
+							sql += " and dsxx.dszlid = ?";
+						}
+					}else{
+						sql += " dsxx.dszlid = ?";
+					}
+				}
+			}
+		}
+		return this.getForPagerBySql(sql, page,param.getDsfg(),param.getDspp(),param.getDszl());
+	}
+
+}

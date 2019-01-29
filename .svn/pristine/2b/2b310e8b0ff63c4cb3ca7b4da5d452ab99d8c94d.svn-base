@@ -1,0 +1,55 @@
+package com.xysoft.http.service.impl;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Resource;
+
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+
+import com.xysoft.dao.TFitGwcDao;
+import com.xysoft.dao.TFitYhxxDao;
+import com.xysoft.entity.TFitGwc;
+import com.xysoft.entity.TFitYhxx;
+import com.xysoft.http.service.AppOrderService;
+import com.xysoft.util.JsonUtil;
+
+@Component
+@SuppressWarnings("unchecked")
+public class AppOrderServiceImpl implements AppOrderService {
+
+	@Resource
+	private TFitYhxxDao tFitYhxxDao;
+	@Resource
+	private TFitGwcDao tFitGwcDao;
+	
+	@Transactional(readOnly = true)
+	public String shoppingcartdatas(String yhm) {
+		TFitYhxx yhxx = this.tFitYhxxDao.getTFitYhxxByYhm(yhm);
+		List<Map<String,Object>> list = this.tFitGwcDao.getTFitGwcs(yhxx.getYhxxid());
+		return JsonUtil.toString(list);
+	}
+
+	@Transactional
+	public String deleteshoppingcarts(String yhm, String[] gwcid) {
+		TFitYhxx yhxx = this.tFitYhxxDao.getTFitYhxxByYhm(yhm);
+		if(gwcid == null){
+			return JsonUtil.toResOfFail("移出购物车失败，请先选择商品");
+		}
+		List<TFitGwc> list = new ArrayList<TFitGwc>();
+		for (String id : gwcid) {
+			TFitGwc gwc = this.tFitGwcDao.getTFitGwc(id);
+			if(!yhxx.getYhxxid().equals(gwc.getYhxxid())){
+				return JsonUtil.toResOfFail("移出购物车失败，请重新登陆");
+			}
+			if(gwc != null){
+				list.add(gwc);
+			}
+		}
+		this.tFitGwcDao.deleteTFitGwcList(list);
+		return JsonUtil.toRes("移出购物车成功");
+	}
+
+}

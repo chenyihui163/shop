@@ -1,0 +1,179 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="/common/hplus/css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="/common/hplus/css/plugins/bootstrap-table/bootstrap-table.min.css" rel="stylesheet">
+    <link href="/common/hplus/css/animate.css" rel="stylesheet">
+    <link href="/common/hplus/css/style.css?v=4.1.0" rel="stylesheet">
+    
+    <script charset="utf-8" src="/common/hplus/js/jquery.min.js"></script>
+    <script src="/common/hplus/js/bootstrap.min.js?v=3.3.6"></script>
+    <script src="/common/hplus/js/plugins/bootstrap-table/bootstrap-table.min.js"></script>
+    <script src="/common/hplus/js/plugins/bootstrap-table/bootstrap-table-mobile.min.js"></script>
+    <script src="/common/hplus/js/plugins/bootstrap-table/locale/bootstrap-table-zh-CN.min.js"></script>
+    
+    <script charset="utf-8" src="/template/admin/js/sysUtils.js"></script>
+    <style>
+		.show-zynr-box{
+			position: absolute; 
+			max-width: 300px; 
+			padding: 15px; 
+			background-color: #18a689; 
+			color: #FFF;
+			display: none;
+			-webkit-border-radius: 5px;
+			-moz-border-radius: 5px;
+			-ms-border-radius: 5px;
+			-o-border-radius: 5px;
+		}
+	</style>
+</head>
+<body>
+	<div class="ibox">
+        <div class="ibox-content animated fadeInRight">
+             <div id="userlist-gridtoolbar" class="btn-group">
+				<button onclick="userlist_add()" class="btn btn-primary " type="button"><i class="fa fa-plus"></i>&nbsp;添加</button>
+            </div>
+			<table id="userlist-grid" style="table-layout: fixed;"></table>
+		</div>
+	</div>
+	<div id="showbox" class="show-zynr-box"></div>
+	
+</body>
+<script type="text/javascript">
+
+      var timer = null;
+         
+      actionEvents = {
+        'mouseover .dz' : function (e, value, row, index) {
+    		var box = $('#showbox');
+			clearTimeout(timer);
+            var pageX = e.pageX;
+            var pageY = e.pageY;
+            var txt = $(this).text();
+            timer = setTimeout(function () {
+//              console.log(pageX, pageY);
+                if (txt == "") {
+                    $(box).hide();
+                } else {
+                    $(box).show();
+                    $(box).html(txt);
+                }
+                if($(window.parent.document).height() < pageY + $(box).outerHeight(true)){
+            		pageY = pageY - $(box).outerHeight(true);
+            	}
+                $(box).css("left", pageX).css("top", pageY);
+            }, 500);
+         },
+         'mouseout .dz' : function (e, value, row, index) {
+         	var box = $('#showbox');
+            clearTimeout(timer);
+            $(box).hide();
+            $(box).empty();
+         }
+	};
+	
+	
+	$('#userlist-grid').bootstrapTable({
+		toolbar: '#userlist-gridtoolbar',
+		url: '/admin/user.do?data',
+		search: true,
+      	showRefresh: true,
+      	showToggle: true,
+      	showColumns: true,
+		striped: true,
+		cache: false,  
+		pagination: true,
+		queryParamsType: '',
+		queryParams: function(params) {
+			params['page'] = params.pageNumber;
+			params['rows'] = params.pageSize;
+			params['keyword'] = params.searchText;
+			return params;
+		},
+		sidePagination: 'server',
+		pageNumber: 1,
+		pageSize: 25,
+		pageList: [10, 25, 50, 100],
+		idField: 'yhxxid',
+		iconSize: 'outline',
+	    columns: [
+	   		{field: 'yhxm',title: '用户姓名', width: 50},
+	   		{field: 'xb',title: '性别', width: 30 , formatter: function(value, row, index){
+	   		        if(value) return '<span>男</span>'
+	   		        else return '<span>女</span>'
+	   		}},
+	   		{field: 'yhm',title: '用户名', width: 60},
+	   		{field: 'yx',title: '邮箱', width: 100},	   		
+	   		{field: 'yb',title: '邮编', width: 60},
+	   		{field: 'dz',title: '地址', width: 100,
+	   		cellStyle: {css: {'white-space': 'nowrap','overflow': 'hidden','text-overflow': 'ellipsis'}}, 
+	        formatter: function(value, row, iyoubianndex) {return  '<span class="dz">' + value + '</span>';}, 
+	        events: actionEvents
+	   		},
+	   		{field: 'dhhm',title: '电话号码', width: 60},
+	        {field: 'xgsj', title: '最后修改时间', width: 60, formatter: function(value, row, index) {
+	        	return new Date(value.time).Format('yyyy-MM-dd hh:mm:ss');
+	        }},
+	        {field: 'zhdlsj', title: '最后登录时间', width: 60, formatter: function(value, row, index) {
+	        	return new Date(value.time).Format('yyyy-MM-dd hh:mm:ss');
+	        }},
+	        {field: 'yhxxid', title: '主要操作', width: 80, formatter: function(value, row, index) {
+	        	var btnhtml = '<div class="float-e-margins">' +
+					'<button onclick="userlist_edit(\'' +value + '\')" class="btn btn-xs btn-info " type="button"><i class="fa fa-paste"></i> 编辑</button> ' +
+					'<button onclick="userlist_delete(\'' +value + '\')" class="btn btn-xs btn-danger " type="button"><i class="fa fa-close"></i> 删除</button>' +
+				'</div>';
+	        	return btnhtml;
+	        }}
+	    ]
+	});
+	
+	var userlist_add = function() {
+		$(this)[0].location.href = 'user.do?add';
+	};
+	
+	var userlist_edit = function(value) {
+		$(this)[0].location.href = 'user.do?edit&yhxxid=' + value;
+	};
+	
+	var userlist_delete = function(value) {
+		var index = parent.layer.open({
+			title: '提示',
+			icon: 0,
+			btn: ['确定', '取消'],
+			content: '您确定要删除该用户数据吗？',
+			cancel: function() {},
+			yes: function() {
+				$.ajax({
+					url : '/admin/user.do?delete',
+					type: 'post',
+					data : {yhxxid: value},
+					dataType : 'json',
+					success : function(res) {
+						if(res.success) {
+							$('#userlist-grid').bootstrapTable('refresh');
+							parent.layer.close(index);
+							parent.layer.msg(res.title);
+						}
+					}
+				});				
+			}
+		});
+	};
+	
+	var policyLookImg = function(value) {
+		parent.layer.open({
+			title:false,
+		    type: 1,
+		    skin: 'layui-layer-demo',
+			shadeClose: true, 
+			maxWidth: window.screen.availWidth,
+		    content:  '<img src="'+value+'" style="max-width:400px;" />'
+		});
+	};
+</script>
+</html>
